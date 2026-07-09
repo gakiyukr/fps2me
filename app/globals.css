@@ -1,0 +1,325 @@
+:root {
+  color-scheme: light;
+  --bg: #eef2f1;
+  --surface: #ffffff;
+  --surface-2: #f6f8f7;
+  --ink: #16211f;
+  --muted: #63716e;
+  --line: #d8e0de;
+  --accent: #11856f;
+  --accent-2: #0f6f8b;
+  --danger: #b83232;
+  --shadow: 0 18px 50px rgba(16, 33, 31, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    linear-gradient(135deg, rgba(17, 133, 111, 0.13), transparent 42%),
+    linear-gradient(315deg, rgba(15, 111, 139, 0.13), transparent 38%),
+    var(--bg);
+  color: var(--ink);
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    "Noto Sans HK", "PingFang HK", "Microsoft JhengHei", sans-serif;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(1120px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 40px 0;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(360px, 0.95fr);
+  gap: 20px;
+  align-items: start;
+}
+
+.panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(216, 224, 222, 0.9);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.form-panel {
+  padding: 28px;
+}
+
+.result-panel {
+  padding: 22px;
+}
+
+.masthead {
+  margin-bottom: 24px;
+}
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--accent-2);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 10px;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+}
+
+.intro {
+  max-width: 680px;
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.field > span,
+.payload-box > span {
+  color: #33433f;
+  font-size: 0.92rem;
+  font-weight: 760;
+}
+
+.field small {
+  color: var(--muted);
+  min-height: 1.25em;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  color: var(--ink);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+input,
+select {
+  min-height: 46px;
+  padding: 0 13px;
+}
+
+textarea {
+  min-height: 120px;
+  padding: 12px;
+  resize: vertical;
+  line-height: 1.5;
+  word-break: break-all;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(17, 133, 111, 0.18);
+}
+
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 132px;
+  gap: 14px;
+}
+
+.phone-grid {
+  display: grid;
+  grid-template-columns: 170px minmax(0, 1fr);
+  gap: 14px;
+  align-items: start;
+}
+
+.phone-grid-single {
+  grid-template-columns: 1fr;
+}
+
+button {
+  min-height: 46px;
+  border: 0;
+  border-radius: 6px;
+  padding: 0 16px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    opacity 0.15s ease;
+}
+
+button:hover:not(:disabled) {
+  background: #0d765f;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.48;
+}
+
+.message {
+  margin: -4px 0 0;
+  color: var(--danger);
+  line-height: 1.5;
+}
+
+.qr-card {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 360px);
+  aspect-ratio: 1;
+  margin: 0 auto 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  padding: 18px;
+}
+
+.qr-card canvas {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.empty-state {
+  position: absolute;
+  inset: 18px;
+  display: grid;
+  place-items: center;
+  border: 1px dashed #c6d0cd;
+  border-radius: 6px;
+  color: var(--muted);
+  text-align: center;
+  background: #fbfcfc;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.summary div {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--surface-2);
+  padding: 10px 12px;
+}
+
+.summary span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.78rem;
+  margin-bottom: 3px;
+}
+
+.summary strong {
+  display: block;
+  overflow-wrap: anywhere;
+  font-size: 0.92rem;
+}
+
+.payload-box {
+  display: grid;
+  gap: 7px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.actions button {
+  background: #263b37;
+}
+
+.actions button:hover:not(:disabled) {
+  background: #172723;
+}
+
+code {
+  border-radius: 4px;
+  background: #e7efec;
+  padding: 0.08em 0.35em;
+  color: #0d584c;
+}
+
+.error {
+  color: var(--danger) !important;
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    width: min(100% - 24px, 620px);
+    padding: 24px 0;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 520px) {
+  .form-panel,
+  .result-panel {
+    padding: 18px;
+  }
+
+  .split,
+  .phone-grid,
+  .summary,
+  .actions {
+    grid-template-columns: 1fr;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
