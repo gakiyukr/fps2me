@@ -169,7 +169,10 @@ function getParticipantCode(bank, customParticipantCode) {
   return customParticipantCode.trim();
 }
 
-function validateParticipantCode(participantCode) {
+function validateParticipantCode(participantCode, required = false) {
+  if (required && !participantCode) {
+    return "選擇自定義時必須填寫收款機構代碼。";
+  }
   if (participantCode && !/^\d{3}$/.test(participantCode)) {
     return "收款機構代碼必須是 3 位數字。";
   }
@@ -205,7 +208,7 @@ function buildPayload({
   }
 
   const participantCode = getParticipantCode(bank, customParticipantCode);
-  const participantError = validateParticipantCode(participantCode);
+  const participantError = validateParticipantCode(participantCode, bank === "custom");
   if (participantError) throw new Error(participantError);
 
   let merchantAccount = tlv(FPS.UNIQUE_ID, "hk.com.hkicl");
@@ -389,15 +392,15 @@ export default function Home() {
                   inputMode="numeric"
                   autoComplete="off"
                   placeholder="例如 043"
+                  required
                 />
                 <small
                   className={
-                    validateParticipantCode(customParticipantCode.trim()) ? "error" : ""
+                    validateParticipantCode(customParticipantCode.trim(), true) ? "error" : ""
                   }
                 >
-                  {customParticipantCode
-                    ? validateParticipantCode(customParticipantCode.trim()) || "將寫入 FPS 子欄位 01"
-                    : "留空則不指定收款機構代碼"}
+                  {validateParticipantCode(customParticipantCode.trim(), true) ||
+                    "將寫入 FPS 子欄位 01"}
                 </small>
               </label>
             ) : null}
