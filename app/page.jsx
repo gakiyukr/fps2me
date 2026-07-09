@@ -68,6 +68,7 @@ const BANKS = [
   ["948", "948 AlipayHK"],
   ["949", "949 Octopus"],
   ["954", "954 PayMe"],
+  ["custom", "自定義收款機構代碼"],
 ];
 
 function tlv(id, value = "") {
@@ -163,7 +164,29 @@ function identifierLabel(type) {
   return "類型：尚未識別";
 }
 
-function buildPayload({ identifier, confirmation, mode, phoneRegion, bank, currency, amount, reference }) {
+function getParticipantCode(bank, customParticipantCode) {
+  if (bank !== "custom") return bank;
+  return customParticipantCode.trim();
+}
+
+function validateParticipantCode(participantCode) {
+  if (participantCode && !/^\d{3}$/.test(participantCode)) {
+    return "收款機構代碼必須是 3 位數字。";
+  }
+  return "";
+}
+
+function buildPayload({
+  identifier,
+  confirmation,
+  mode,
+  phoneRegion,
+  bank,
+  customParticipantCode,
+  currency,
+  amount,
+  reference,
+}) {
   const first = detectIdentifier(identifier, mode, phoneRegion);
   const second = detectIdentifier(confirmation, mode, phoneRegion);
 
@@ -181,8 +204,12 @@ function buildPayload({ identifier, confirmation, mode, phoneRegion, bank, curre
     throw new Error("備註只支援英文字母、數字、. @ _ + -。");
   }
 
+  const participantCode = getParticipantCode(bank, customParticipantCode);
+  const participantError = validateParticipantCode(participantCode);
+  if (participantError) throw new Error(participantError);
+
   let merchantAccount = tlv(FPS.UNIQUE_ID, "hk.com.hkicl");
-  if (bank) merchantAccount += tlv(FPS.PARTICIPANT, bank);
+  if (participantCode) merchantAccount += tlv(FPS.PARTICIPANT, participantCode);
   if (first.type === "fpsId") merchantAccount += tlv(FPS.IDENTIFIER_FPS_ID, first.value);
   if (first.type === "mobile") merchantAccount += tlv(FPS.IDENTIFIER_MOBILE, first.value);
   if (first.type === "email") merchantAccount += tlv(FPS.IDENTIFIER_EMAIL, first.value);
@@ -211,6 +238,7 @@ export default function Home() {
   const [mode, setMode] = useState("auto");
   const [phoneRegion, setPhoneRegion] = useState("852");
   const [bank, setBank] = useState("");
+  const [customParticipantCode, setCustomParticipantCode] = useState("");
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("HKD");
   const [reference, setReference] = useState("");
@@ -246,6 +274,7 @@ export default function Home() {
         mode,
         phoneRegion,
         bank,
+        customParticipantCode,
         currency,
         amount,
         reference,
@@ -347,6 +376,31 @@ export default function Home() {
                 ))}
               </select>
             </label>
+
+            {bank === "custom" ? (
+              <label className="field">
+                <span>自定義收款機構代碼</span>
+                <input
+                  value={customParticipantCode}
+                  onChange={(event) =>
+                    setCustomParticipantCode(event.target.value.replace(/\D/g, "").slice(0, 3))
+                  }
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="off"
+                  placeholder="例如 043"
+                />
+                <small
+                  className={
+                    validateParticipantCode(customParticipantCode.trim()) ? "error" : ""
+                  }
+                >
+                  {customParticipantCode
+                    ? validateParticipantCode(customParticipantCode.trim()) || "將寫入 FPS 子欄位 01"
+                    : "留空則不指定收款機構代碼"}
+                </small>
+              </label>
+            ) : null}
 
             <div className="split">
               <label className="field">
