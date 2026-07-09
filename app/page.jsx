@@ -443,6 +443,10 @@ export default function Home() {
             <button type="submit">生成 QR Code</button>
             {message ? <p className="message">{message}</p> : null}
           </form>
+
+          <div className="notice" role="note">
+            部分銀行或錢包未必會嚴格遵守 QR Code 內的收款機構欄位。掃描後請仔細檢查付款畫面顯示的收款機構及收款資料。
+          </div>
         </div>
 
         <aside className="panel result-panel" aria-live="polite">
